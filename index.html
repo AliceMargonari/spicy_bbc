@@ -54,6 +54,37 @@
     }
   </style>
 </head>
+<script>
+  const startTime = Date.now();
+  const urlParams = new URLSearchParams(window.location.search);
+  const pid = urlParams.get("pid");
+  const returnTo = decodeURIComponent(urlParams.get("returnTo") || "");
+
+  function returnToSurvey() {
+    const duration = Math.round((Date.now() - startTime) / 1000);
+
+    // log to Google Sheets
+    fetch("YOUR_GOOGLE_SCRIPT_WEBAPP_URL", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        pid: pid,
+        page: window.location.pathname.replaceAll("/", ""),
+        time_spent: duration,
+        timestamp: new Date().toISOString()
+      })
+    });
+
+    // Redirect to Qualtrics if a return URL is set
+    if (returnTo) {
+      const redirect = `${returnTo}?pid=${pid}&duration=${duration}`;
+      window.location.href = redirect;
+    }
+  }
+</script>
+
+<!-- Add a button to trigger return -->
+<button onclick="returnToSurvey()">Return to the Survey</button>
 <body>
   <div class="logo">
     <img src="bbc-logo.png" alt="BBC">
