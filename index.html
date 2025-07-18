@@ -74,17 +74,8 @@
         timestamp: new Date().toISOString()
       })
     });
-
-    // Redirect to Qualtrics if a return URL is set
-    if (returnTo) {
-      const redirect = `${returnTo}?pid=${pid}&duration=${duration}`;
-      window.location.href = redirect;
-    }
   }
 </script>
-
-<!-- Add a button to trigger return -->
-<button onclick="returnToSurvey()">Return to the Survey</button>
 <body>
   <div class="logo">
     <img src="bbc-logo.png" alt="BBC">
