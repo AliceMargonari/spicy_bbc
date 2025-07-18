@@ -54,26 +54,29 @@
     }
   </style>
 </head>
-
-<script>
+<script>  
 const startTime = Date.now();
 const urlParams = new URLSearchParams(window.location.search);
 const pid = urlParams.get("pid");
+const condition = urlParams.get("condition") || "unknown";  // fallback if missing
 
 window.addEventListener("beforeunload", () => {
   const duration = Math.round((Date.now() - startTime) / 1000);
+
   fetch("https://script.google.com/macros/s/AKfycbxMGEy_7qAc6M0KZkLU0DPXOlr3XjpDeQVpm6mW3a2LI91Tf8ZR0DrFR3cWiyFpIxuDKw/exec", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       pid: pid,
+      condition: condition,
       page: window.location.pathname.replaceAll("/", ""),
       time_spent: duration,
       timestamp: new Date().toISOString()
-      })
-    });
-  }
-</script>
+    })
+  });
+});
+<script>
+
 <body>
   <div class="logo">
     <img src="bbc-logo.png" alt="BBC">
