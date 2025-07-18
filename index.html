@@ -54,24 +54,22 @@
     }
   </style>
 </head>
+
 <script>
-  const startTime = Date.now();
-  const urlParams = new URLSearchParams(window.location.search);
-  const pid = urlParams.get("pid");
-  const returnTo = decodeURIComponent(urlParams.get("returnTo") || "");
+const startTime = Date.now();
+const urlParams = new URLSearchParams(window.location.search);
+const pid = urlParams.get("pid");
 
-  function returnToSurvey() {
-    const duration = Math.round((Date.now() - startTime) / 1000);
-
-    // log to Google Sheets
-    fetch("https://script.google.com/macros/s/AKfycbxMGEy_7qAc6M0KZkLU0DPXOlr3XjpDeQVpm6mW3a2LI91Tf8ZR0DrFR3cWiyFpIxuDKw/exec", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        pid: pid,
-        page: window.location.pathname.replaceAll("/", ""),
-        time_spent: duration,
-        timestamp: new Date().toISOString()
+window.addEventListener("beforeunload", () => {
+  const duration = Math.round((Date.now() - startTime) / 1000);
+  fetch("https://script.google.com/macros/s/AKfycbxMGEy_7qAc6M0KZkLU0DPXOlr3XjpDeQVpm6mW3a2LI91Tf8ZR0DrFR3cWiyFpIxuDKw/exec", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      pid: pid,
+      page: window.location.pathname.replaceAll("/", ""),
+      time_spent: duration,
+      timestamp: new Date().toISOString()
       })
     });
   }
@@ -87,3 +85,7 @@
   <p>Most spicy food will contain the chemical capsaicin – it’s found in things like chillies or jalapeño peppers and acts as a deterrent to mammals who might snack on them and prevent further crops from growing.</p>
   <p>When our receptors detect capsaicin, it triggers a reaction. It’s not unlike what would happen if we ate something before it cooled down and it can leave the mouth feeling incredibly hot. </p>
   <p>So if those spices are causing us pain, why do so many of us choose the hottest dishes on a menu? Because there are some health benefits to eating spicy food as part of a balanced diet. Some of the compounds of capsaicin can increase energy and your body’s metabolism.</p>
+  <br>
+  <p style="font-size: 16px; color: #333; margin-top: 40px;">
+  You may now close this tab and return to the survey.
+  </p>
