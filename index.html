@@ -64,7 +64,7 @@
     const duration = Math.round((Date.now() - startTime) / 1000);
 
     // log to Google Sheets
-    fetch("YOUR_GOOGLE_SCRIPT_WEBAPP_URL", {
+    fetch("https://script.google.com/macros/s/AKfycbxMGEy_7qAc6M0KZkLU0DPXOlr3XjpDeQVpm6mW3a2LI91Tf8ZR0DrFR3cWiyFpIxuDKw/exec", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
