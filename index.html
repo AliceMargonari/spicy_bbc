@@ -54,42 +54,47 @@
   <p>Most spicy food will contain the chemical capsaicin – it’s found in things like chillies or jalapeño peppers and acts as a deterrent to mammals who might snack on them and prevent further crops from growing.</p>
   <p>When our receptors detect capsaicin, it triggers a reaction. It’s not unlike what would happen if we ate something before it cooled down and it can leave the mouth feeling incredibly hot.</p>
   <p>So if those spices are causing us pain, why do so many of us choose the hottest dishes on a menu? Because there are some health benefits to eating spicy food as part of a balanced diet. Some of the compounds of capsaicin can increase energy and your body’s metabolism.</p>
-  
+
   <br>
   <p style="text-transform: uppercase; color: blue; margin-bottom: 30px;">
     You may now close this tab and return to the survey  
   </p>
 
-  <script>
-    const params = new URLSearchParams(window.location.search);
-    const prolific_pid = params.get("prolific_pid");
-    const condition = params.get("condition");
-    const page_name = params.get("page_name");
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const prolific_pid = params.get("prolific_pid");
+  const condition = params.get("condition");
+  const page_name = params.get("page_name");
 
-    const entryTime = new Date();
+  const entryTime = new Date();
 
-    window.addEventListener("unload", function () {
-      const exitTime = new Date();
-      const timeSpent = Math.round((exitTime - entryTime) / 1000);
+  const entryIds = {
+    prolific_pid: "entry.434492044",
+    condition: "entry.1225575535",
+    page_name: "entry.925161350",
+    entry_time: "entry.732388184",
+    exit_time: "entry.372350073",
+    time_spent: "entry.298480214"
+  };
 
-      const payload = {
-        prolific_pid,
-        condition,
-        page_name,
-        entry_time: entryTime.toISOString(),
-        exit_time: exitTime.toISOString(),
-        time_spent: timeSpent
-      };
+  window.addEventListener("unload", function () {
+    const exitTime = new Date();
+    const timeSpent = Math.round((exitTime - entryTime) / 1000);
 
-      console.log("Sending to Google Sheets:", payload);
+    const formData = new FormData();
+    formData.append(entryIds.prolific_pid, prolific_pid);
+    formData.append(entryIds.condition, condition);
+    formData.append(entryIds.page_name, page_name);
+    formData.append(entryIds.entry_time, entryTime.toISOString());
+    formData.append(entryIds.exit_time, exitTime.toISOString());
+    formData.append(entryIds.time_spent, timeSpent);
 
-      const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
+    navigator.sendBeacon(
+      "https://docs.google.com/forms/d/e/1FAIpQLSfPfKcw2oVlFINPNThg4q0FgfVdxxCCLn40vwPY6nXEH2ybeQ/formResponse",
+      new URLSearchParams(formData)
+    );
+  });
+</script>
 
-      navigator.sendBeacon(
-        "https://script.google.com/macros/s/AKfycbwpBuHXa0AtuUBsYfSpFtPRrjdwdFwnMthg4nz9USln/exec",
-        blob
-      );
-    });
-  </script>
 </body>
 </html>
