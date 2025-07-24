@@ -56,21 +56,21 @@
 </head>
 <script>
   const params = new URLSearchParams(window.location.search);
-  const prolific_pid = params.get("PROLIFIC_PID");
+  const prolific_pid = params.get("prolific_pid");
   const condition = params.get("condition");
+  const page_name = params.get("source"); // or hardcode it if needed
 
-  const page_name = "spicy_bbc"; 
   const entryTime = new Date();
 
   window.addEventListener("beforeunload", function () {
     const exitTime = new Date();
     const timeSpent = Math.round((exitTime - entryTime) / 1000);
 
-    fetch("https://script.google.com/macros/s/AKfycbwLbKIL7-XpaJyinhQfAAGtb-yta1XxacydWKFBWj7juh9ROGVdFtS_2J_rf-zKSLQodw/exec", {
+    fetch("https://script.google.com/macros/s/AKfycbyOmcSP9JZCFIImgbFD_dxC64Y1f8B5abpEZRErHDMT_FEroMb5Gcaf1rDCrjwRW04i8A/exec", {
       method: "POST",
       body: JSON.stringify({
-        prolific_pid: prolific_pid || "missing",
-        condition: condition || "missing",
+        prolific_pid: prolific_pid,
+        condition: condition,
         page_name: page_name,
         entry_time: entryTime.toISOString(),
         exit_time: exitTime.toISOString(),
