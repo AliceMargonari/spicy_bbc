@@ -54,28 +54,33 @@
     }
   </style>
 </head>
-<script>  
-const startTime = Date.now();
-const urlParams = new URLSearchParams(window.location.search);
-const pid = urlParams.get("pid");
-const condition = urlParams.get("condition") || "unknown";  // fallback if missing
-
-window.addEventListener("beforeunload", () => {
-  const duration = Math.round((Date.now() - startTime) / 1000);
-
-  fetch("https://script.google.com/macros/s/AKfycbxMGEy_7qAc6M0KZkLU0DPXOlr3XjpDeQVpm6mW3a2LI91Tf8ZR0DrFR3cWiyFpIxuDKw/exec", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      pid: pid,
-      condition: condition,
-      page: window.location.pathname.replaceAll("/", ""),
-      time_spent: duration,
-      timestamp: new Date().toISOString()
-    })
-  });
-});
 <script>
+  const params = new URLSearchParams(window.location.search);
+  const prolific_pid = params.get("PROLIFIC_PID");
+  const condition = params.get("condition");
+
+  const entryTime = new Date();
+
+  window.addEventListener("beforeunload", function () {
+    const exitTime = new Date();
+    const timeSpent = Math.round((exitTime - entryTime) / 1000);
+
+    fetch("https://script.google.com/macros/s/AKfycbwLbKIL7-XpaJyinhQfAAGtb-yta1XxacydWKFBWj7juh9ROGVdFtS_2J_rf-zKSLQodw/exec", {
+      method: "POST",
+      body: JSON.stringify({
+        prolific_pid: prolific_pid || "missing",
+        condition: condition || "missing",
+        entry_time: entryTime.toISOString(),
+        exit_time: exitTime.toISOString(),
+        time_spent: timeSpent
+      }),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    });
+  });
+</script>
+
 
 <body>
   <div class="logo">
