@@ -71,41 +71,39 @@
     You may now close this tab and return to the survey  
   </p>
 
-  <!-- ✅ MOVED SCRIPT HERE -->
-  <script>
-    const params = new URLSearchParams(window.location.search);
-    const prolific_pid = params.get("prolific_pid");
-    const condition = params.get("condition");
-    const page_name = params.get("page_name");
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const prolific_pid = params.get("prolific_pid");
+  const condition = params.get("condition");
+  const page_name = params.get("page_name");
 
-    const entryTime = new Date();
+  const entryTime = new Date();
 
-    window.addEventListener("beforeunload", function () {
-      const exitTime = new Date();
-      const timeSpent = Math.round((exitTime - entryTime) / 1000);
+  window.addEventListener("unload", function () {
+    const exitTime = new Date();
+    const timeSpent = Math.round((exitTime - entryTime) / 1000);
 
-      const payload = {
-        prolific_pid: prolific_pid,
-        condition: condition,
-        page_name: page_name,
-        entry_time: entryTime.toISOString(),
-        exit_time: exitTime.toISOString(),
-        time_spent: timeSpent
-      };
+    const payload = {
+      prolific_pid: prolific_pid,
+      condition: condition,
+      page_name: page_name,
+      entry_time: entryTime.toISOString(),
+      exit_time: exitTime.toISOString(),
+      time_spent: timeSpent
+    };
 
-      console.log("Sending to Google Sheets:", payload); // ✅ DEBUG
+    console.log("Sending to Google Sheets:", payload); // ✅ Check this appears in Console
 
-      fetch("https://script.google.com/macros/s/AKfycbyOmcSP9JZCFIImgbFD_dxC64Y1f8B5abpEZRErHDMT_FEroMb5Gcaf1rDCrjwRW04i8A/exec", {
-        method: "POST",
-        body: JSON.stringify(payload),
-        headers: {
-          "Content-Type": "application/json"
-        }
-      }).catch(error => {
-        console.error("Fetch failed:", error);
-      });
-    });
-  </script>
+    // Use navigator.sendBeacon instead of fetch
+    const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
+
+    navigator.sendBeacon(
+      "https://script.google.com/macros/s/AKfycbyOmcSP9JZCFIImgbFD_dxC64Y1f8B5abpEZRErHDMT_FEroMb5Gcaf1rDCrjwRW04i8A/exec",
+      blob
+    );
+  });
+</script>
+
 </body>
 </html>
 
