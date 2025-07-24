@@ -59,16 +59,14 @@
   const prolific_pid = params.get("PROLIFIC_PID");
   const condition = params.get("condition");
 
-  // 👇 Add your page name here
-  const page_name = "experiment_page_1"; // CHANGE this string for each page
-
+  const page_name = "spicy_bbc"; 
   const entryTime = new Date();
 
   window.addEventListener("beforeunload", function () {
     const exitTime = new Date();
     const timeSpent = Math.round((exitTime - entryTime) / 1000);
 
-    fetch("YOUR_GOOGLE_SCRIPT_WEBAPP_URL", {
+    fetch("https://script.google.com/macros/s/AKfycbwLbKIL7-XpaJyinhQfAAGtb-yta1XxacydWKFBWj7juh9ROGVdFtS_2J_rf-zKSLQodw/exec", {
       method: "POST",
       body: JSON.stringify({
         prolific_pid: prolific_pid || "missing",
